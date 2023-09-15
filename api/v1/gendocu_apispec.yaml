@@ -15,6 +15,6 @@ securitySchemes:
       token:
         exampleValue: "..."
         grpc:
-          meta: "APP_KEY"
-        grpcweb:
-          header: "TOKEN"
+          meta:
+            - "APP_KEY"
+            - "TOKEN"

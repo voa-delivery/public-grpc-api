@@ -2,18 +2,20 @@ spectype: gendocu
 servers:
   - selector: "*"
     envs:
-      - name: "gcp"
+      - name: "Production"
         urls:
-          - grpcs://grpc.voa.delivery
+          - grpcs://grpc.voa.delivery:443
 securitySchemes:
   - name: token-private
     title: Token Auth
     description:
       text: APP_KEY identifica a plataforma parceira. TOKEN identifica o cliente da plataforma parceira e deve ser gerado pelo painel da voa.delivery.
     callAuthentication:
-      token:
-        exampleValue: "aaa.bbb.ccc"
+      key:
+        exampleValue: "<app_key>"
         grpc:
           meta: "APP_KEY"
-        grpcweb:
-          header: "TOKEN"
+      token:
+        exampleValue: "<token>"
+        grpc:
+          meta: "TOKEN"

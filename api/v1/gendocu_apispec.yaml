@@ -9,11 +9,11 @@ securitySchemes:
   - name: token-private
     title: Token Auth
     description:
-      text: APP_KEY identifica a plataforma parceira. TOKEN identifica o cliente da plataforma parceira e deve ser gerado pelo painel da voa.delivery.
+      text: ...
     callAuthentication:
       token:
         exampleValue: "..."
         grpc:
-          meta: "TOKEN"
+          meta: "APP_KEY"
         grpcweb:
-          header: "APP_KEY"
+          header: "TOKEN"

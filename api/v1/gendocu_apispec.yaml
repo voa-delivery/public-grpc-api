@@ -5,11 +5,12 @@ servers:
       - name: "Production"
         urls:
           - grpcs://grpc.voa.delivery:443
+          - grpcwebs://grpc.voa.delivery
 securitySchemes:
   - name: token-private
     title: Token Auth
     description:
-      text: ...
+      text: Solicitar as credenciais ao suporte da voa.delivery, pelo WhatsApp (48) 99841-0198.
     callAuthentication:
       token:
         exampleValue: "..."

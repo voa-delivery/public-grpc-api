@@ -15,4 +15,4 @@ securitySchemes:
       token:
         exampleValue: "<xpto>"
         grpc:
-          meta: ["APP_KEY", "TOKEN"]
+          meta: "APP_KEY"

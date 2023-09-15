@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package public.v1;
+
+option go_package = "infrastructure/server/grpc/v1";
+
+import "entities.proto";
+
+message GetOrganizationRequest {}
+
+message GetOrganizationResponse {
+  Organization organization = 1;
+}
+
+service OrganizationsService {
+  rpc GetOrganization(GetOrganizationRequest) returns (GetOrganizationResponse);
+}

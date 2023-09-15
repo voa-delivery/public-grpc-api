@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package public.v1;
+
+option go_package = "infrastructure/server/grpc/v1";
+
+import "google/protobuf/timestamp.proto";
+import "entities.proto";
+
+message SimulateRequest {
+  repeated Delivery destinations = 1;
+  optional Address source = 15;
+}
+
+message SimulateResponse {
+  optional string id = 1;
+  double total = 2;
+  optional google.protobuf.Timestamp expected_delivery_until = 3;
+}
+
+service SimulationsService {
+  rpc Simulate(SimulateRequest) returns (SimulateResponse);
+}

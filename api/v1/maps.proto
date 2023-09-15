@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package public.v1;
+
+option go_package = "infrastructure/server/grpc/v1";
+
+import "entities.proto";
+
+message GeocodeRequest {
+  string query = 1;
+}
+message GeocodeResponse {
+  repeated Address suggestions = 1;
+}
+
+service MapsService {
+  rpc Geocode(GeocodeRequest) returns (GeocodeResponse);
+}

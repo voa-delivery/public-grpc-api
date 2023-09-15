@@ -1,0 +1,155 @@
+syntax = "proto3";
+
+package public.v1;
+
+option go_package = "infrastructure/server/grpc/v1";
+
+import "google/protobuf/timestamp.proto";
+
+enum OrderStatus {
+  ORDER_STATUS_UNKNOWN = 0;
+  ORDER_STATUS_SCHEDULED = 1;
+  ORDER_STATUS_LOCATING_COURIER = 2;
+  ORDER_STATUS_ON_ROUTE_TO_COLLECT = 3;
+  ORDER_STATUS_AWAITING_PRODUCTION = 4;
+  ORDER_STATUS_ON_ROUTE_TO_DELIVERY = 5;
+  ORDER_STATUS_DELIVERED = 6;
+  ORDER_STATUS_CANCELED = 7;
+}
+
+enum OrderEvent {
+  ORDER_EVENT_UNKNOWN = 0;
+  ORDER_EVENT_ADDED_ROUND_TRIP = 1;
+  ORDER_EVENT_REMOVED_ROUND_TRIP = 2;
+  ORDER_EVENT_ADDED_DYNAMIC_FEE = 3;
+  ORDER_EVENT_REMOVED_DYNAMIC_FEE = 4;
+}
+
+message Metadata {
+  optional google.protobuf.Timestamp created_at = 1;
+  optional google.protobuf.Timestamp updated_at = 2;
+  // ...
+  optional google.protobuf.Timestamp canceled_at = 3;
+}
+
+message Schedule {
+  int64 dispatch_at_in_minutes = 1;
+  google.protobuf.Timestamp dispatch_at = 2;
+}
+
+message Courier {
+  string id = 1;
+  string name = 2;
+}
+
+message History {
+  optional OrderStatus status = 1;
+  optional OrderEvent event = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
+
+// https://grpc.voa.delivery/
+
+message Order {
+  string id = 1;
+  Address source = 2;
+  repeated Delivery destinations = 3;
+  OrderStatus status = 4;
+  bool round_trip = 5;
+  double total = 6;
+  repeated History history = 7;
+  optional Courier courier = 15;
+  optional Schedule schedule = 16;
+  optional Metadata metadata = 20;
+}
+
+// ===
+
+enum OrganizationStatus {
+  ORGANIZATION_STATUS_UNKNOWN = 0;
+  ORGANIZATION_STATUS_ACTIVE = 1;
+  ORGANIZATION_STATUS_INACTIVE = 2;
+}
+
+message Organization {
+  string id = 1;
+  string name = 2;
+  double balance = 3;
+  OrganizationStatus status = 4;
+}
+
+// ===
+
+message Location {
+  double latitude = 1;
+  double longitude = 2;
+}
+
+message Address {
+  string state = 1;
+  string city = 2;
+  string neighborhood = 3;
+  string street = 4;
+  string number = 5;
+  optional string zip_code = 6;
+  optional Location coordinates = 7;
+  optional string complement = 8;
+  optional string country = 9;
+}
+
+message Phone {
+  optional string ddd = 1;
+  string number = 2;
+}
+
+enum DocumentType {
+  DOCUMENT_TYPE_UNKNOWN = 0;
+  DOCUMENT_TYPE_CPF = 1;
+  DOCUMENT_TYPE_CNPJ = 2;
+}
+
+message Document {
+  DocumentType type = 1;
+  string value = 2;
+}
+
+message Customer {
+  string name = 1;
+  optional Phone phone = 10;
+  optional string email = 11;
+  optional Document document = 12;
+}
+
+message Payment {
+  double pre_paid = 1; // 1050
+  double pending = 2; // 5000
+  repeated PaymentWay ways = 3;
+}
+
+message PaymentWay {
+  double value = 1; // 5000
+  PaymentMethod method = 2; // PAYMENT_METHOD_CASH
+  PaymentType type = 3; // PAYMENT_TYPE_OFFLINE
+  optional double cash_change_for = 10; // 10000
+}
+
+enum PaymentMethod {
+  PAYMENT_METHOD_UNKNOWN = 0;
+  PAYMENT_METHOD_CARD = 1;
+  PAYMENT_METHOD_CASH = 2;
+  PAYMENT_METHOD_PIX = 3;
+  PAYMENT_METHOD_OTHER = 4;
+}
+
+enum PaymentType {
+  PAYMENT_TYPE_UNKNOWN = 0;
+  PAYMENT_TYPE_ONLINE = 1;
+  PAYMENT_TYPE_OFFLINE = 2;
+}
+
+message Delivery {
+  Customer customer = 1;
+  Address address = 2;
+  optional string external_id = 10;
+  optional Payment payment = 11;
+}

@@ -7,14 +7,25 @@ servers:
           - grpcs://grpc.voa.delivery:443
           - grpcwebs://grpc.voa.delivery
 securitySchemes:
-  - name: token-private
-    title: Token Auth
+  - name: app_key
+    title: Application Key
     description:
       text: Solicitar as credenciais ao suporte da voa.delivery, pelo WhatsApp (48) 99841-0198.
     callAuthentication:
       token:
         exampleValue: "..."
         grpc:
-          meta:
-            - "APP_KEY"
-            - "TOKEN"
+          meta: "APP_KEY"
+        grpcweb:
+          header: "APP_KEY"
+  - name: token
+    title: Token
+    description:
+      text: Solicitar as credenciais ao suporte da voa.delivery, pelo WhatsApp (48) 99841-0198.
+    callAuthentication:
+      token:
+        exampleValue: "..."
+        grpc:
+          meta: "TOKEN"
+        grpcweb:
+          header: "TOKEN"
